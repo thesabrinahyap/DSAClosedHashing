@@ -5,25 +5,26 @@
 
 #define EMPTY 0
 #define DELETED -1
+
 typedef struct{
 	int elem;
 	int link;
 }Data;
- 
+
 typedef struct{
 	Data *data;
 	int avail;
 	int count;
-	int max;	
+	int max;
 }VSpace;
 
-
-int hash (int value, int size);
-VSpace newVSpace(int max);
+VSpace newSpace(int max);
 int allocSpace(VSpace *VS);
-void freeSpace(VSpace *VS, int loc);
-bool addElement (VSpace *VS);
-bool removeElement(VSpace *VS);
-void visualizeVSpace(VSpace VS);
+void deallocSpace(VSpace *VS, int node);
+int hash(int data, int size); //hash value is number mod size/2
+int* rehash(VSpace VS); //call newSpace *2 then loop addelement from old vspace
+bool addElement (VSpace *VS, int data);
+bool removeElement (VSpace *VS, int data);
+void visualize(VSpace VS);
 
 #endif
