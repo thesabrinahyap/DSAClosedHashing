@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
 #include "ClosedHashing.h"
 
 VSpace newSpace(int max){
@@ -54,12 +53,40 @@ int hash(int data, int size){
 }
 
 //call newSpace *2 then loop addelement from old vspace
-int* rehash(VSpace VS){
+void rehash(VSpace *VS){
+	
+	VSpace V = newSpace((VS->max)* 2);
+	int top;
+	
+	for(int ctr = 0; ctr<VS->max; ++ctr){
+		int newValue = hash(VS->data.elem, V.max);
+		
+		// add element pero hard code because of the data field
+		if(V.data[newValue].elem == EMPTY || V.data[newValue].elem == DELETED){
+			V.data[newValue].elem = data;
+		}else{
+			while(V.data[newValue].link != -1 && V.data[newValue].elem != EMPTY && V.data[newValue].elem != DELETED){
+			top = V.data[newValue].link;
+		}
+			int node = allocSpace(V);
+		
+			V.data[newValue].elem = VS->data.elem;
+			V.data[node].link = -1;
+		
+			V.data[top].link = node;
+		}
+	
+		V.count++;
+	}
+	
+	VS->max *= 2;
+	VS = &V;
 	
 }
 
 bool addElement (VSpace *VS, int data){
 	int ctr;
+	
 	
 	int value = hash(data, VS->max);
 	
@@ -67,7 +94,9 @@ bool addElement (VSpace *VS, int data){
 	int maxthreshold = (70.00 * VS->max) / 100.00;
 	int synonymthreshold = (70.00 * ((VS->max/2)+1)) /100.00;
 	
-	
+	if(VS->count > maxthreshold && VS->count > synonymthreshold){
+		rehash(VS);
+	}
 	//End
 	
 	if(VS->data[value].elem == EMPTY || VS->data[value].elem == DELETED){
