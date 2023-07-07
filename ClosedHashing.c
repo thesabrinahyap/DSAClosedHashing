@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
 #include "ClosedHashing.h"
 
 VSpace newSpace(int max){
@@ -39,7 +40,12 @@ int allocSpace(VSpace *VS){
 	return retVal;
 }
 void deallocSpace(VSpace *VS, int node){
-	
+	int retVal = -1;
+	if(VS->avail != -1){
+		retVal = VS->avail;
+		VS->avail = VS->data[VS->avail].link;
+	}
+	return retVal;
 }
 
  //hash value is number mod size/2
